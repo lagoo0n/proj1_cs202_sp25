@@ -17,4 +17,3 @@ class RegionCondition:
     year: int
     pop: int
     ghg_rate: float # tons of CO2 per year
-
