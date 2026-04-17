@@ -1,17 +1,19 @@
 from dataclasses import dataclass
-@dataclass(frozen=True)
 
+@dataclass(frozen=True)
 class GlobeRect:
     lo_lat: float
     hi_lat: float
     west_long: float
     east_long: float
 
+@dataclass(frozen=True)
 class Region:
     rect: GlobeRect
     name: str
     terrain: str # e.g. "ocean", "mountain", "forest", "other"
 
+@dataclass(frozen=True)
 class RegionCondition:
     region: Region
     year: int
@@ -25,3 +27,7 @@ region_condition = [
     RegionCondition(Region(GlobeRect(35.0, 35.6, -120.9, -120.2), "San Luis Obispo", "other"), 2025, 300000, 500000.0)
 ]
 
+def emissions_per_capita(region: RegionCondition) -> float:
+    if region.pop == 0:
+        return 0.0
+    return region.ghg_rate / region.pop
