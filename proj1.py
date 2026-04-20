@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from math import sin
+from math import pi
 
 @dataclass(frozen=True)
 class GlobeRect:
@@ -35,13 +36,13 @@ def emissions_per_capita(rc: RegionCondition) -> float:
 
 def area(gr: GlobeRect) -> float:
     R = 6378.1
-    lambda1, lambda2 = gr.west_long * (3.14159 / 180), gr.east_long * (3.14159 / 180)
-    phi1, phi2 = gr.lo_lat * (3.14159 / 180), gr.hi_lat * (3.14159 / 180)
+    lambda1, lambda2 = gr.west_long * (pi / 180), gr.east_long * (pi / 180)
+    phi1, phi2 = gr.lo_lat * (pi / 180), gr.hi_lat * (pi / 180)
 
     diff_lambda = lambda2 - lambda1
     if diff_lambda < 0:
-        diff_lambda += 2 * 3.14159
-    return R**2 * abs(diff_lambda) * abs(sin(phi2) - sin(phi1))
+        diff_lambda += 2 * pi
+    return round(R**2 * abs(diff_lambda) * abs(sin(phi2) - sin(phi1)),2)
 
 def emissions_per_square_km(rc: RegionCondition) -> float:
     return rc.ghg_rate / area(rc.region.rect)
@@ -51,7 +52,7 @@ def densest_helper(rc: list[RegionCondition]) -> RegionCondition:
         return rc[0]
     
     first = rc[0]
-    rest = densest(rc[1:])
+    rest = densest_helper(rc[1:])
 
     first_dens = first.pop / area(first.region.rect)
     res_dens = rest.pop / area(rest.region.rect)  
@@ -62,4 +63,4 @@ def densest_helper(rc: list[RegionCondition]) -> RegionCondition:
         return rest
 
 def densest(rc: list[RegionCondition]) -> str:
-    return densest_helper(rc).name
+    return densest_helper(rc).region.name

@@ -20,6 +20,20 @@ class TestRegionFunctions(unittest.TestCase):
         rc = RegionCondition(Region(GlobeRect(35.0, 35.6, -120.9, -120.2), "San Luis Obispo", "other"), 2025, 0, 100000000.0)
         self.assertAlmostEqual(emissions_per_capita(rc), 0.0)
 
+    def test_area(self):
+        gr = GlobeRect(10.0, 20.0, 30.0, 40.0)
+        self.assertAlmostEqual(area(gr), 1195445.55)
+
+    def test_emissions_per_square_km(self):
+        rc = RegionCondition(Region(GlobeRect(10.0, 20.0, 30.0, 40.0), "San Luis Obispo", "other"), 2025, 1000, 5000.0)
+        self.assertAlmostEqual(emissions_per_square_km(rc), 5000.0 / 1195445.55)
+
+    def test_densest(self):
+        rc = [RegionCondition(Region(GlobeRect(10.0, 20.0, 30.0, 40.0), "Region1", "other"), 2025, 1000, 5000.0),
+                   RegionCondition(Region(GlobeRect(10.0, 20.0, 30.0, 40.0), "Region2", "other"), 2025, 2000, 10000.0),
+                   RegionCondition(Region(GlobeRect(10.0, 20.0, 30.0, 40.0), "Region3", "other"), 2025, 3000, 100000.0)]
+        self.assertEqual(densest(rc), "Region3")
+
 
 if __name__ == '__main__':
     unittest.main()
