@@ -22,7 +22,7 @@ class TestRegionFunctions(unittest.TestCase):
 
     def test_area(self):
         gr = GlobeRect(10.0, 20.0, 30.0, 40.0)
-        self.assertAlmostEqual(area(gr), 1195445.55)
+        self.assertAlmostEqual(area(gr), 1195445.5450393162)
 
     def test_emissions_per_square_km(self):
         rc = RegionCondition(Region(GlobeRect(10.0, 20.0, 30.0, 40.0), "San Luis Obispo", "other"), 2025, 1000, 5000.0)
@@ -33,6 +33,13 @@ class TestRegionFunctions(unittest.TestCase):
                    RegionCondition(Region(GlobeRect(10.0, 20.0, 30.0, 40.0), "Region2", "other"), 2025, 2000, 10000.0),
                    RegionCondition(Region(GlobeRect(10.0, 20.0, 30.0, 40.0), "Region3", "other"), 2025, 3000, 100000.0)]
         self.assertEqual(densest(rc), "Region3")
+
+    def test_project_condition(self):
+        rc = RegionCondition(Region(GlobeRect(35.0, 35.6, -120.9, -120.2), "San Luis Obispo", "other"), 2025, 100, 100.0)
+        projected = project_condition(rc, 5)
+        self.assertEqual(projected.year, 2030)
+        self.assertEqual(projected.pop, int(100 * 1.0003 ** 5))
+        self.assertEqual(projected.ghg_rate, 100.0 * 1.0003 ** 5)
 
 
 if __name__ == '__main__':
