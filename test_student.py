@@ -13,12 +13,12 @@ class TestRegionFunctions(unittest.TestCase):
         pass
 
     def test1_emissions_per_capita(self):
-        region = RegionCondition(Region(GlobeRect(35.0, 35.6, -120.9, -120.2), "San Luis Obispo", "other"), 2025, 300000, 500000.0)
-        self.assertAlmostEqual(emissions_per_capita(region), 500000.0 / 300000)
+        rc = RegionCondition(Region(GlobeRect(35.0, 35.6, -120.9, -120.2), "San Luis Obispo", "other"), 2025, 300000, 500000.0)
+        self.assertAlmostEqual(emissions_per_capita(rc), 500000.0 / 300000)
 
     def test2_emissions_per_capita(self):
-        region = RegionCondition(Region(GlobeRect(35.0, 35.6, -120.9, -120.2), "San Luis Obispo", "other"), 2025, 0, 100000000.0)
-        self.assertAlmostEqual(emissions_per_capita(region), 0.0)
+        rc = RegionCondition(Region(GlobeRect(35.0, 35.6, -120.9, -120.2), "San Luis Obispo", "other"), 2025, 0, 100000000.0)
+        self.assertAlmostEqual(emissions_per_capita(rc), 0.0)
 
 
 if __name__ == '__main__':

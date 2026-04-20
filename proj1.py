@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from math import sin
 
 @dataclass(frozen=True)
 class GlobeRect:
@@ -27,7 +28,13 @@ region_condition = [
     RegionCondition(Region(GlobeRect(35.0, 35.6, -120.9, -120.2), "San Luis Obispo", "other"), 2025, 300000, 500000.0)
 ]
 
-def emissions_per_capita(region: RegionCondition) -> float:
-    if region.pop == 0:
+def emissions_per_capita(rc: RegionCondition) -> float:
+    if rc.pop == 0:
         return 0.0
-    return region.ghg_rate / region.pop
+    return rc.ghg_rate / rc.pop
+
+def area(gr: GlobeRect) -> float:
+    R = 6378.1
+    lamda1, lamda2 = gr.west_long * (3.14159 / 180), gr.east_long * (3.14159 / 180)
+    phi1, phi2 = gr.lo_lat * (3.14159 / 180), gr.hi_lat * (3.14159 / 180)
+    return R**2 * abs(lamda2 - lamda1) * abs(sin(phi2) - sin(phi1))
