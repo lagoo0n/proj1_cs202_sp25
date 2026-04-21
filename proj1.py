@@ -78,7 +78,7 @@ def project_condition(rc: RegionCondition, years: int) -> RegionCondition:
     elif rc.region.terrain == "forest":
         growth = 0.99999
 
-    elif rc.region.terrain == "other":
+    else:
         growth = 1.0003 
 
     return RegionCondition(rc.region, year, int(rc.pop * growth ** years), rc.ghg_rate * growth ** years)
